@@ -5,15 +5,15 @@ import { useEffect, useState } from "react";
 import * as userService from "../services/userService";
 
 const UserListTable = () => {
+    const [users, setUsers] = useState([]);
 
-    const [users, setUsers] = useState([])
+    useEffect(() => {
+        userService.getAll().then((result) => setUsers(result));
+    }, []);
 
-
-    useEffect(()=> {
-      userService.getAll()
-       .then(result => setUsers(result))
-
-    },[])
+    const createUserClickHandler = () =>{
+        
+    }
 
     return (
         <div className="table-wrapper">
@@ -115,9 +115,20 @@ const UserListTable = () => {
                     </tr>
                 </thead>
                 <tbody>
-                   <UserListItem/>
+                    {users.map((user) => (
+                        <UserListItem
+                            key={user._id}
+                            createdAt={user.createdAt}
+                            email={user.email}
+                            firstName={user.firstName}
+                            lastName={user.lastName}
+                            phoneNumber={user.phoneNumber}
+                            imageUrl={user.imageUrl}
+                        />
+                    ))}
                 </tbody>
             </table>
+            <button className="btn-add btn" onClick={createUserClickHandler}>Add new user</button>
         </div>
     );
 };
