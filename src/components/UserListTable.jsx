@@ -3,20 +3,29 @@ import UserListItem from "./UserListItem";
 import { useEffect, useState } from "react";
 
 import * as userService from "../services/userService";
+import CreateUserModal from "./createUserModal";
 
 const UserListTable = () => {
     const [users, setUsers] = useState([]);
-
+    const [showCreate, setShowCreate] = useState(false);
+    
     useEffect(() => {
         userService.getAll().then((result) => setUsers(result));
     }, []);
-
+    
     const createUserClickHandler = () =>{
-        
+        setShowCreate(true)
     }
 
+    const hideCreateUserModal = () => {
+        setShowCreate(false)
+
+    }
+    
     return (
         <div className="table-wrapper">
+            {showCreate && <CreateUserModal hideModal={hideCreateUserModal} /> }
+
             <table className="table">
                 <thead>
                     <tr>
@@ -128,7 +137,9 @@ const UserListTable = () => {
                     ))}
                 </tbody>
             </table>
+
             <button className="btn-add btn" onClick={createUserClickHandler}>Add new user</button>
+
         </div>
     );
 };

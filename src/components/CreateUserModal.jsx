@@ -1,12 +1,13 @@
-const CreateUserModal = () => {
+/* eslint-disable react/prop-types */
+const CreateUserModal = ({ hideModal }) => {
     return (
         <div className="overlay">
-            <div className="backdrop"></div>
+            <div className="backdrop" onClick={hideModal}></div>
             <div className="modal">
                 <div className="user-container">
                     <header className="headers">
-                        <h2>Edit User/Add User</h2>
-                        <button className="btn close">
+                        <h2>Add User</h2>
+                        <button className="btn close" onClick={hideModal}>
                             <svg
                                 aria-hidden="true"
                                 focusable="false"
@@ -166,6 +167,7 @@ const CreateUserModal = () => {
                                 id="action-cancel"
                                 className="btn"
                                 type="button"
+                                onClick={hideModal}
                             >
                                 Cancel
                             </button>
