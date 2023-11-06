@@ -1,17 +1,17 @@
-import Search from "./Search"
-import UserListTable from "./UserListTable"
+import Search from "./Search";
+import UserListTable from "./UserListTable";
 
-const UserList = () =>{
-
+const UserList = () => {
     return (
         <section className="card users-container">
+            <Search />
 
-           <Search />
+            <UserListTable />
 
-           <UserListTable/>
-
+            {/* <!-- New user button  --> */}
+            <button className="btn-add btn">Add new user</button>
+            
         </section>
-    )
-
-}
-export default UserList
+    );
+};
+export default UserList;
