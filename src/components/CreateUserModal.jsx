@@ -1,13 +1,16 @@
 /* eslint-disable react/prop-types */
-const CreateUserModal = ({ hideModal }) => {
+const CreateUserModal = ({ 
+    onClose,
+    onUserCreate,
+ }) => {
     return (
         <div className="overlay">
-            <div className="backdrop" onClick={hideModal}></div>
+            <div className="backdrop" onClick={onClose}></div>
             <div className="modal">
                 <div className="user-container">
                     <header className="headers">
                         <h2>Add User</h2>
-                        <button className="btn close" onClick={hideModal}>
+                        <button className="btn close" onClick={onClose}>
                             <svg
                                 aria-hidden="true"
                                 focusable="false"
@@ -25,7 +28,7 @@ const CreateUserModal = ({ hideModal }) => {
                             </svg>
                         </button>
                     </header>
-                    <form>
+                    <form onSubmit={onUserCreate}>
                         <div className="form-row">
                             <div className="form-group">
                                 <label htmlFor="firstName">First name</label>
@@ -167,7 +170,7 @@ const CreateUserModal = ({ hideModal }) => {
                                 id="action-cancel"
                                 className="btn"
                                 type="button"
-                                onClick={hideModal}
+                                onClick={onClose}
                             >
                                 Cancel
                             </button>

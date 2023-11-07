@@ -10,7 +10,9 @@ const UserListTable = () => {
     const [showCreate, setShowCreate] = useState(false);
     
     useEffect(() => {
-        userService.getAll().then((result) => setUsers(result));
+        userService.getAll()
+        .then((result) => setUsers(result))
+        .catch(err => console.log(err))
     }, []);
     
     const createUserClickHandler = () =>{
@@ -19,12 +21,24 @@ const UserListTable = () => {
 
     const hideCreateUserModal = () => {
         setShowCreate(false)
+    }
 
+    const userCreateHandler = async (e) =>{
+        e.preventDefault()
+        
+        const data = Object.fromEntries(new FormData(e.currentTarget))
+        const newUser = await userService.create(data)
+        
+        setShowCreate(state => [...state,newUser ])
     }
     
     return (
         <div className="table-wrapper">
-            {showCreate && <CreateUserModal hideModal={hideCreateUserModal} /> }
+            {showCreate && (<CreateUserModal
+             onClose={hideCreateUserModal}
+             onUserCreate={userCreateHandler}
+              />
+             )}
 
             <table className="table">
                 <thead>
