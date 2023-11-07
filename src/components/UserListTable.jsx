@@ -6,11 +6,13 @@ import * as userService from "../services/userService";
 
 import CreateUserModal from "./createUserModal";
 import UserInfoModal from "./UserInfoModal";
+import UserDeleteModal from "./UserDeleteModal";
 
 const UserListTable = () => {
     const [users, setUsers] = useState([]);
     const [showCreate, setShowCreate] = useState(false);
     const [showInfo, setShowInfo] = useState(false);
+    const [showDelete, setShowDelete] = useState(false);
     const [selectedUser, setSelectedUser] = useState(null);
 
 
@@ -20,31 +22,56 @@ const UserListTable = () => {
             .then((result) => setUsers(result))
             .catch((err) => console.log(err));
     }, []);
-
+    
+    
+        /* Create Modal - Show */
     const createUserClickHandler = () => {
         setShowCreate(true);
     };
-
+        /* Create Modal - Hide */
     const hideCreateUserModal = () => {
         setShowCreate(false);
     };
-
+        /* Create User */
     const userCreateHandler = async (e) => {
         e.preventDefault();
 
         const data = Object.fromEntries(new FormData(e.currentTarget));
         const newUser = await userService.create(data);
 
-        setShowCreate((state) => [...state, newUser]);
+        setUsers((state) => [...state, newUser]);
+        
+        setShowCreate(false)
     };
 
+    /* Info Modal - Show && ID set to state  */
     const userInfoClickHandler = async (userId) => {
         setSelectedUser(userId)
         setShowInfo(true)
     };
 
+
+    /* Delete Modal - Show */
+    const userDeleteClickHandler = async (userId) =>{
+        setSelectedUser(userId)
+        setShowDelete(true)
+    }
+
+    const userDeleteHandler = async () => {
+        /* Remove user from server */
+        await userService.deleteUser(selectedUser)
+
+        /* Remove user from state */
+        setUsers(state => state.filter(user=> user._id !== selectedUser))
+
+        /* Close delete modal*/
+        setShowDelete(false)
+
+    }
+
     return (
         <div className="table-wrapper">
+            
             {showCreate && (
                 <CreateUserModal
                     onClose={hideCreateUserModal}
@@ -52,9 +79,17 @@ const UserListTable = () => {
                 />
             )}
 
-            {showInfo && (<UserInfoModal 
+            {showInfo && (
+            <UserInfoModal 
             onClose={() => setShowInfo(false)} 
             userId = {selectedUser} 
+            />
+            )}
+
+            {showDelete && (
+            <UserDeleteModal
+                onClose={() => setShowDelete(false)}
+                onDelete={userDeleteHandler}
             />
             )}
 
@@ -167,6 +202,7 @@ const UserListTable = () => {
                             phoneNumber={user.phoneNumber}
                             imageUrl={user.imageUrl}
                             onInfoClick={userInfoClickHandler}
+                            onDeleteClick ={userDeleteClickHandler}
                         />
                     ))}
                 </tbody>

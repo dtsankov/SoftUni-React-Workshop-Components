@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 const baseUrl = "http://localhost:3030/jsonstore/users";
 
 export const getAll = async () => {
@@ -44,6 +45,17 @@ export const create = async (data) => {
     })
 
     const result = await(response.json())
+
+    return result
+}
+
+export const deleteUser = async(userId) =>{
+    const response = await fetch(`${baseUrl}/${userId}`,{
+        method: 'DELETE',
+        headers: {'Content-Type' : 'application/json'}
+    })
+
+    const result = await response.json()
 
     return result
 }
